@@ -1,31 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="id">
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LazGo - Where Time Meets Responsibility</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>LazGo — Demo</title>
+    <!-- Tailwind via CDN (mudah dipakai tanpa build) -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <script type="importmap">
-    {
-      "imports": {
-        "react/": "https://aistudiocdn.com/react@^19.2.0/",
-        "react": "https://aistudiocdn.com/react@^19.2.0",
-        "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-        "@google/genai": "https://aistudiocdn.com/@google/genai@^1.26.0",
-        "jspdf": "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js",
-        "jspdf-autotable": "https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js",
-        "xlsx": "https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"
-      }
-    }
-    </script>
-
-    <link rel="stylesheet" href="index.css">
+    <meta name="robots" content="noindex">
+    <style>
+      /* sedikit styling tambahan agar rapi */
+      body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+    </style>
   </head>
+  <body class="min-h-screen bg-[#1c59c6] text-white flex items-center justify-center p-6">
+    <div class="max-w-3xl w-full bg-white/10 backdrop-blur rounded-2xl p-6 shadow-lg">
+      <header class="mb-4">
+        <h1 class="text-2xl font-bold">LazGo — Demo Aplikasi</h1>
+        <p class="text-sm text-white/80 mt-1">Versi statis sementara — tidak membutuhkan index.tsx agar tidak blank.</p>
+      </header>
 
-  <body class="bg-[#1c59c6] dark:bg-gray-900 transition-colors duration-300">
-    <div id="root"></div>
-    <script type="module" src="index.tsx"></script>
+      <section class="mb-4">
+        <label class="block text-sm font-medium mb-2">Prompt (dari Google AI Studio)</label>
+        <textarea id="promptArea" class="w-full h-36 p-3 rounded-lg text-black" readonly>
+LazGo terinspirasi dari Let’s Go dengan pengucapan yang hampir sama dan memiliki arti Laz dari Lazuardi Go “Go Forward” untuk transformasi digital dan kemajuan sistem kerja.
+        </textarea>
+      </section>
+
+      <div class="flex gap-3 items-center">
+        <button id="copyBtn" class="px-4 py-2 rounded-lg bg-white text-blue-700 font-semibold hover:bg-gray-100">Salin Prompt</button>
+        <button id="downloadBtn" class="px-4 py-2 rounded-lg bg-white/20 border border-white/30 hover:bg-white/10">Unduh (.txt)</button>
+        <a href="https://studio.google.com" target="_blank" rel="noopener" class="ml-auto text-sm underline text-white/90">Buka Google AI Studio</a>
+      </div>
+
+      <div id="status" class="mt-4 text-sm"></div>
+
+      <footer class="mt-6 text-xs text-white/70">
+        Jika kamu ingin fitur interaktif (panggiilan API), kita butuh menambahkan backend / Netlify functions. Untuk sementara ini versi statis agar tidak blank.
+      </footer>
+    </div>
+
+    <script>
+      const copyBtn = document.getElementById('copyBtn');
+      const promptArea = document.getElementById('promptArea');
+      const status = document.getElementById('status');
+      const downloadBtn = document.getElementById('downloadBtn');
+
+      copyBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(promptArea.value);
+          status.textContent = 'Tersalin ke clipboard ✅';
+          setTimeout(()=> status.textContent = '', 2000);
+        } catch (e) {
+          status.textContent = 'Gagal menyalin — silakan blok & salin manual.';
+        }
+      });
+
+      downloadBtn.addEventListener('click', () => {
+        const filename = 'prompt-lazgo.txt';
+        const blob = new Blob([promptArea.value], {type: 'text/plain'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+        status.textContent = 'File terunduh ✅';
+        setTimeout(()=> status.textContent = '', 2000);
+      });
+    </script>
   </body>
 </html>
