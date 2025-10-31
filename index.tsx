@@ -1,16 +1,13 @@
+import React from "https://aistudiocdn.com/react@19.2.0";
+import ReactDOM from "https://aistudiocdn.com/react-dom@19.2.0";
 
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-
-const rootElement = document.getElementById('root');
-if (!rootElement) {
-  throw new Error("Could not find root element to mount to");
+function App() {
+  return (
+    <div className="text-white text-center mt-20">
+      <h1 className="text-4xl font-bold">🚀 LazGo</h1>
+      <p className="mt-4 text-lg">Where Time Meets Responsibility</p>
+    </div>
+  );
 }
 
-const root = ReactDOM.createRoot(rootElement);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+ReactDOM.render(<App />, document.getElementById("root"));
